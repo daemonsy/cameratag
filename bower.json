@@ -1,0 +1,18 @@
+{
+  "name": "cameratag",
+  "version": "3.0.0",
+  "authors": [
+    "Damon Aw <daemonsy@gmail.com>"
+  ],
+  "main": "cameratag.js",
+  "license": "MIT",
+  "homepage": "cameratag.com",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/bower_components",
+    "test",
+    "tests"
+  ]
+}
