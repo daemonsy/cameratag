@@ -6,7 +6,7 @@
   ],
   "main": "cameratag.js",
   "license": "MIT",
-  "homepage": "cameratag.com",
+  "homepage": "http://cameratag.com",
   "ignore": [
     "**/.*",
     "node_modules",
