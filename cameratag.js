@@ -4,10 +4,10 @@
 
 CameraTag = new function() {
   var self = this;
-  self.version = "3";
+  self.version = "4";
 
   var appServer = "cameratag.com";
-
+  
   self.cameras = {};
   self.players = {};
   self.uploaders = {};
@@ -19,7 +19,7 @@ CameraTag = new function() {
   var ct_jQuery = null;
   var jQueryPreInstalled = window.jQuery && jQuery.fn && /^[1-9]/.test(jQuery.fn.jquery) || false;
   var jQueryInjected = false;
-
+  
   var ct_swfobject;
   var swfObjectInjected = false;
 
@@ -82,8 +82,8 @@ CameraTag = new function() {
 
 
   self.setup = function() {
-
-
+    
+    
     // make sure prototype is available
     if (!jQueryReady()) {
       setTimeout(self.setup, 30);
@@ -118,7 +118,7 @@ CameraTag = new function() {
     // Our CameraTag.version is installed
     else if (ct_jQuery) {
       return true;
-    }
+    } 
     // Our injected CameraTag.version of jQuery is ready- now let's scope it
     else if (window.jQuery && jQuery.fn && /^[1-9]/.test(jQuery.fn.jquery) ) {
       ct_jQuery = jQuery.noConflict(true);
@@ -134,7 +134,7 @@ CameraTag = new function() {
       return false;
     }
     else {
-      return false;
+      return false;  
     }
   }
 
@@ -143,7 +143,7 @@ CameraTag = new function() {
     if ( typeof(swfobject) == "object" ) {
       ct_swfobject = swfobject;
       return true;
-    }
+    } 
     // embed the script if we havent already
     else if (!swfObjectInjected) {
       var swfobject_script = document.createElement('script');
@@ -152,7 +152,7 @@ CameraTag = new function() {
       swfObjectInjected = true;
     }
     else {
-      return false;
+      return false;  
     }
   };
 
@@ -161,7 +161,7 @@ CameraTag = new function() {
     if ( typeof(plupload) == "object" ) {
       ct_plupload = plupload;
       return true;
-    }
+    } 
     // embed the script if we havent already
     else if (!plUploadInjected) {
       var plupload_script = document.createElement('script');
@@ -171,7 +171,7 @@ CameraTag = new function() {
       return false;
     }
     else {
-      return false;
+      return false;  
     }
   };
 
@@ -198,7 +198,7 @@ CameraTag = new function() {
       return false
     }
     else {
-      return false;
+      return false;  
     }
   };
 
@@ -239,7 +239,7 @@ CameraTag = new function() {
       },
 
       error: function(jqXHR, textStatus, errorThrown) {
-        sendStat("authorization_error", {code: jqXHR.status});
+        sendStat("authorization_error", {code: jqXHR.status});  
         callback({ success: false, message: "error initializing recorder" });
       }
     });
@@ -277,7 +277,7 @@ CameraTag = new function() {
       callbacks[camera_dom_id][event_name].splice(0,0,callback);
     }
     else {
-      callbacks[camera_dom_id][event_name].push(callback);
+      callbacks[camera_dom_id][event_name].push(callback);  
     }
   };
 
@@ -286,7 +286,7 @@ CameraTag = new function() {
       callbacks[camera_dom_id] = {};
     if ( !callbacks[camera_dom_id][event_name] )
       callbacks[camera_dom_id][event_name] = [];
-
+    
     setTimeout(function(){
       fire_handlers(camera_dom_id,event_name,data);
     }, 1);
@@ -306,7 +306,7 @@ CameraTag = new function() {
       callbacks[camera_dom_id] = {};
     if ( !callbacks[camera_dom_id][event_name] )
       callbacks[camera_dom_id][event_name] = [];
-
+    
 
     for( i = 0; i < callbacks[camera_dom_id][event_name].length; i++ ) {
       if( callbacks[camera_dom_id][event_name][i] == callback )
@@ -433,8 +433,8 @@ CameraTag = new function() {
     self.stopRecording = function(){};
     self.stopPlayback = function(){};
     self.showFlashSettings = function(){};
-
-    // state management
+    
+    // state management 
     var state;
     var connected = false;
     var readyToRecord = false;
@@ -470,10 +470,10 @@ CameraTag = new function() {
       error_messages = [];
       readyToPublish = false;
       if (connected) {
-        self.disconnect();
+        self.disconnect();  
       }
-
-
+      
+      
 
       // get permission for a new video
       new_video(camera_uuid, function(server_response){
@@ -481,7 +481,7 @@ CameraTag = new function() {
           camera = server_response.camera;
           video = server_response.video;
           if (existing_uuid) {
-            video.uuid = existing_uuid
+            video.uuid = existing_uuid  
           }
           plan = server_response.plan;
           videoServer = server_response.videoServer;
@@ -498,7 +498,7 @@ CameraTag = new function() {
                 self.disconnect();
               }
               sendStat("publish_success");
-              CameraTag.fire(dom_id, "published", video);
+              CameraTag.fire(dom_id, "published", video);  
               if (poll_processed) {
                 pollForProcessed();
               }
@@ -585,11 +585,11 @@ CameraTag = new function() {
       else {
         preRollLength = 5;
       }
+      
 
-
-      // build the control elements
+      // build the control elements  
       buildInterface();
-      setupEventObservers();
+      setupEventObservers();  
 
       // check for non-compatible mobile device
       if (mobile_browser && !mobile_enabled) {
@@ -605,13 +605,13 @@ CameraTag = new function() {
 
       // initialize if we're mobile (otherwise the swf will do it)
       if (mobile_browser) {
-        CameraTag.fire(dom_id, "initialized");
+        CameraTag.fire(dom_id, "initialized");  
       }
     };
 
     var embedSWF = function() {
       var flashvars = {
-          videoServer: videoServer + ":443",
+          videoServer: videoServer,
           videoUUID: video.uuid,
           cameraUUID: camera.uuid,
           domID: dom_id,
@@ -661,7 +661,7 @@ CameraTag = new function() {
       error_messages = [];
       readyToPublish = false;
       if (connected) {
-        self.disconnect();
+        self.disconnect();  
       }
       self.uploader.destroy();
       container.remove();
@@ -683,7 +683,7 @@ CameraTag = new function() {
     }
 
     var buildInterface = function() {
-      // inject our css
+      // inject our css 
       if (document.createStyleSheet) { // for IE
         document.createStyleSheet(css_url);
         document.createStyleSheet("//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css");
@@ -704,7 +704,7 @@ CameraTag = new function() {
       if (!mobile_browser) {
         // create swf placeholder in container then embed the camera swf
         container.append("<div id='"+dom_id+"_swf_placeholder'></div>")
-        embedSWF();
+        embedSWF();  
         // communication to and from swf
         setupExternalInterface();
       }
@@ -719,7 +719,7 @@ CameraTag = new function() {
       start_screen = $("#"+dom_id+"-start-screen").addClass("cameratag_screen");
       if (start_screen.length == 0) {
         start_screen = $('<div id="'+dom_id+'_start_screen" style="font-size:'+font_size+'px" class="cameratag_screen cameratag_start"></div>');
-
+        
         var selection_prompt = $('<a class="cameratag_select_prompt">'+CT_i18n[4]+'</a>');
         start_screen.append(selection_prompt);
 
@@ -727,11 +727,11 @@ CameraTag = new function() {
           var record_btn = $('<a class="cameratag_primary_link cameratag_record_link cameratag_record"><span class="cameratag_action_icon">&#61501;</span><br><span class="cameratag_prompt_label">'+CT_i18n[5]+'</span></a>');
           start_screen.append(record_btn);
         }
-
+        
         if (sources.indexOf("upload") != -1 && !mobile_enabled) {
           var upload_btn = $('<a id="'+dom_id+'_upload_link" class="cameratag_primary_link cameratag_upload_link cameratag_upload"><span class="cameratag_action_icon">&#61678;</span><br><span class="cameratag_prompt_label">'+CT_i18n[6]+'</span></a>');
           start_screen.append(upload_btn);
-        }
+        } 
 
         if (sources.indexOf("sms") != -1 || mobile_enabled) {
           var sms_btn = $('<a class="cameratag_primary_link cameratag_sms_link"><span class="cameratag_action_icon">&#61707;</span><br><span class="cameratag_prompt_label">'+CT_i18n[7]+'</span></a>');
@@ -740,7 +740,7 @@ CameraTag = new function() {
 
         if (!mobile_enabled) {
           var settings_btn = $('<img class="cameratag_settings_btn" src="//cameratag.com/assets/gear.png">');
-          start_screen.append(settings_btn);
+          start_screen.append(settings_btn);  
         }
       }
       // add to DOM
@@ -766,7 +766,7 @@ CameraTag = new function() {
       }
       // add to DOM
       container.append(error_screen);
-
+ 
       // camera detection
       camera_detection_screen = $("#"+dom_id+"-camera-detection-screen").addClass("cameratag_screen");
       if (camera_detection_screen.length == 0) {
@@ -825,18 +825,18 @@ CameraTag = new function() {
       }
       // add to DOM
       container.append(recording_screen);
-
-
+    
+    
       // play controls
       playback_screen = $("#"+dom_id+"-playback-screen").addClass("cameratag_screen");
       if (playback_screen.length == 0) {
         playback_screen = $('<div class="cameratag_screen cameratag_playback cameratag_stop_playback"></div>');
         var skip_prompt = $('<div class="cameratag_prompt">'+CT_i18n[12]+'</div>');
-        playback_screen.append(skip_prompt);
+        playback_screen.append(skip_prompt);  
       }
       // add to DOM
       container.append(playback_screen);
-
+      
 
       // accept controls
       accept_screen = $("#"+dom_id+"-accept-screen").addClass("cameratag_screen");
@@ -851,7 +851,7 @@ CameraTag = new function() {
       }
       // add to DOM
       container.append(accept_screen);
-
+      
 
       // wait screen
       wait_screen = $("#"+dom_id+"-wait-screen").addClass("cameratag_screen");
@@ -906,7 +906,7 @@ CameraTag = new function() {
       container.append(check_phone_screen);
 
 
-      // load up the start screen
+      // load up the start screen 
       self.loadInterface(start_screen, true);
 
       // mobile DOM elements
@@ -914,8 +914,8 @@ CameraTag = new function() {
         // make whole thing uploader on mobile
         // timeout is ugly hack for devices that don't seem to load css quicly enough
         setTimeout(function(){
-          self.uploader = create_pluploader(start_screen.attr("id"));
-        }, 1000);
+          self.uploader = create_pluploader(start_screen.attr("id"));    
+        }, 1000);        
       }
 
       // hidden inputs
@@ -928,7 +928,7 @@ CameraTag = new function() {
         container.append("<input id='"+input_name+"_"+format.name+"_small_thumb' type='hidden' name='"+input_name+"["+format.name+"][small_thumb]' value=''>");
       });
 
-
+      
 
 
 
@@ -941,13 +941,13 @@ CameraTag = new function() {
         container.find(".cameratag_stop_playback").click(function(){self.stopPlayback()});
         container.find(".cameratag_play").click(function(){self.play()});
         container.find(".cameratag_publish").click(function(){self.publish()});
-        container.find(".cameratag_goto_start").click(function(){self.loadInterface(start_screen, true);});
+        container.find(".cameratag_goto_start").click(function(){self.loadInterface(start_screen, true);});  
         container.find(".cameratag_send_sms").click(function(){self.send_sms(sms_input.val());});
         container.find(".cameratag_sms_link").click(function(){self.loadInterface(sms_screen);});
         container.find(".cameratag_settings_btn").click(function(e){
           e.stopPropagation();
           self.showFlashSettings();
-        });
+        });  
       }
     };
 
@@ -1001,7 +1001,7 @@ CameraTag = new function() {
         container.find(".cameratag_alternatives").show();
       }
       else {
-       container.find(".cameratag_alternatives").hide();
+       container.find(".cameratag_alternatives").hide(); 
       }
 
       if (state_container != "none") {
@@ -1068,12 +1068,12 @@ CameraTag = new function() {
         // videos
         var mp4_url = "//"+appServer+"/videos/"+video.uuid+"/"+format.name+"/mp4.mp4";
         if (camera.create_webm) {
-          var webm_url = "//"+appServer+"/videos/"+video.uuid+"/"+format.name+"/webm.webm";
+          var webm_url = "//"+appServer+"/videos/"+video.uuid+"/"+format.name+"/webm.webm";  
         }
         else {
-          var webm_url = "";
+          var webm_url = "";   
         }
-
+        
 
         $("#"+input_name+"_"+format.name+"_video").val(mp4_url);
         video.formats[format.name]["video_url"] = mp4_url;
@@ -1102,7 +1102,7 @@ CameraTag = new function() {
       }
 
       var json_string = JSON.stringify(js_object);
-
+      
       $.ajax({
         url: "//"+appServer+"/api/v"+CameraTag.version+"/videos/"+video.uuid+"/form_data.json",
         data:{form_data: json_string},
@@ -1146,12 +1146,12 @@ CameraTag = new function() {
         success: function(response) {
           if (response.success) {
             self.loadInterface(check_phone_screen);
-            CameraTag.fire(dom_id, "smsSent");
+            CameraTag.fire(dom_id, "smsSent");  
           }
           else {
             self.loadInterface(sms_screen);
             alert(CT_i18n[26]);
-          }
+          } 
         },
         error: function() {
           throw_error(CT_i18n[27]);
@@ -1189,7 +1189,7 @@ CameraTag = new function() {
         multi_selection : false,
         drop_element: dom_id+"_start_screen",
         max_retries: 2,
-
+        
         // Specify what files to browse for
         filters : [
           {title : 'Videos', extensions : 'mov,mpg,mpeg,mp4,m4v,avi,3gp,3gp2,webm,flv,f4v,wmv'}
@@ -1200,7 +1200,7 @@ CameraTag = new function() {
           'key': '', // this gets replaced on a file by file level during upload
           'acl': 'public-read',
           'success_action_status': '201',
-          'AWSAccessKeyId': 'AKIAJCHWZMZ35EB62V2A',
+          'AWSAccessKeyId': 'AKIAJCHWZMZ35EB62V2A',    
           'policy': ul_policy,
           'signature': ul_signature,
           'filename': "this is for flash runtime compatability"
@@ -1257,7 +1257,7 @@ CameraTag = new function() {
       });
 
       // set file key before uploading
-      pluploader.bind('UploadFile', function(up, file) {
+      pluploader.bind('UploadFile', function(up, file) { 
         pluploader.settings.multipart_params.key = file.s3_key;
       });
 
@@ -1283,21 +1283,21 @@ CameraTag = new function() {
 
         if (publishOnUpload) {
           wait(CT_i18n[38]);
-          publish_on_server(video.uuid, "upload"); // publish without s3
+          publish_on_server(video.uuid, "upload"); // publish without s3  
         }
         else {
           self.loadInterface(completed_screen);
-        }
+        }  
       });
 
       // binds all files uploaded
       pluploader.bind('UploadComplete', function(up, file) {
-        // dont need to do anything here
+        // dont need to do anything here 
       });
 
       // shows error object in the browser console (for now)
       pluploader.bind('Error', function(up, error) {
-        // unfortunately PLUpload gives some extremely vague
+        // unfortunately PLUpload gives some extremely vague 
         // Flash error messages so you have to use WireShark
         // for debugging them (read the README)
         // console.log('Expand the error object below to see the error. Use WireShark to debug.');
@@ -1306,7 +1306,7 @@ CameraTag = new function() {
         sendStat("upload_error", error);
       });
 
-
+    
       $("#"+dom_id+"_start_screen").bind('dragenter', function() {
         $(this).find(".cameratag_select_prompt").html(CT_i18n[23]);
         $(".cameratag_primary_link").hide();
@@ -1318,7 +1318,7 @@ CameraTag = new function() {
         $(this).find(".cameratag_select_prompt").html(CT_i18n[4]);
         $(".cameratag_primary_link").show();
       });
-
+      
 
       pluploader.init();
 
@@ -1388,7 +1388,7 @@ CameraTag = new function() {
         swf.showFlashSettings();
       }
 
-      self.record = function() { // actually calls countdown which will call record_without_countdown in callback
+      self.record = function() { // actually calls countdown which will call record_without_countdown in callback      
         if (connected) {
           CameraTag.fire(dom_id, "countdownStarted");
           swf.showRecorder();
@@ -1405,30 +1405,30 @@ CameraTag = new function() {
       }
 
       self.showPlayer = function() {
-        swf.showPlayer();
+        swf.showPlayer(); 
       }
 
       self.record_without_countdown = function() {
         if (!readyToRecord) {
           sendStat("premature_record");
           throw("Camera not ready to record. Please observe 'readyToRecord' event before recording");
-          return;
+          return;  
         }
         state = "recording";
         swf.showRecorder();
-        swf.startRecording()
+        swf.startRecording()  
       };
 
       self.stopPlayback = function() {
         if (connected) {
-          swf.stopPlayback();
+          swf.stopPlayback();  
         }
       };
 
       self.stopRecording = function() {
         clearInterval(record_timer);
         if (connected) {
-          swf.stopRecording();
+          swf.stopRecording();  
         }
       };
 
@@ -1479,7 +1479,7 @@ CameraTag = new function() {
       CameraTag.observe(dom_id, "readyToRecord", function() {
         readyToRecord = true;
         if (recordOnConnect) {
-          self.record(); //starts countdown
+          self.record(); //starts countdown    
         }
       }, true);
 
@@ -1499,7 +1499,7 @@ CameraTag = new function() {
           swf.showNothing();
           throw_error(CT_i18n[31]);
           setTimeout(function(){
-            self.loadInterface(start_screen);
+            self.loadInterface(start_screen);  
           }, 2000);
           sendStat("pre_record_disconnect_error");
         }
@@ -1517,7 +1517,7 @@ CameraTag = new function() {
 
       CameraTag.observe(dom_id, "waitingForCameraActivity", function() {
       }, true);
-
+      
 
       CameraTag.observe(dom_id, "countdownStarted", function() {
         self.loadInterface(countdown_screen);
@@ -1549,7 +1549,7 @@ CameraTag = new function() {
 
       CameraTag.observe(dom_id, "bufferingDown", function() {
         wait(CT_i18n[37]);
-      }, true);
+      }, true);    
 
       CameraTag.observe(dom_id, "recordingTimeOut", function() {
       }, true);
@@ -1650,16 +1650,16 @@ CameraTag = new function() {
         uuids = eval(video_el.attr("data-uuid"));
       } else if (video_el.attr("data-uuid") != "") {
         uuids = [ video_el.attr("data-uuid") ]
-      } else {
+      } else {  
         alert("no video uuids found")
       }
 
-      // build playlist
+      // build playlist 
       build_playlist_array(uuids);
 
       // parse any options that were passed in
       if (video_el.attr("data-options")) {
-        user_options = JSON.parse( video_el.attr("data-options") );
+        user_options = JSON.parse( video_el.attr("data-options") );  
       }
       else {
         user_options = {}
@@ -1682,34 +1682,61 @@ CameraTag = new function() {
             var format = find_format_by_name( video, video_el.attr("data-format") ) || video.formats[0];
             var source;
 
-            // determine which source to use based on availability
-            if (format.state == "COMPLETED") {
-              source = format.mp4_url;
-            }
-            else if (format.flv_url) {
-              source = format.flv_url;
-            }
-            else {
-              // no source available
-              return;
+            if (format) {
+              // determine which source to use based on availability
+              if (format.state == "COMPLETED") {
+                source = format.mp4_url;
+              }
+              else if (format.flv_url) {
+                source = format.flv_url;
+              }
+              else {
+                // no source available
+                return;
+              }
+
+              playlist.push({
+                image: format.small_thumbnail_url,
+                sources: [
+                  { file: source }
+                ],
+                height: format.height,
+                width: format.width,
+                uuid: video.uuid
+              })
+
+              if (playlist.length == uuids.length) {
+                init_jwplayer();
+              }  
             }
 
+            else {
+              playlist.push({
+                image: "https://cameratag.com/videos/v-4f03e790-f640-0131-cc78-12313914f10b/720p/small_thumb.png",
+                sources: [
+                  { file: "https://cameratag.com/videos/v-4f03e790-f640-0131-cc78-12313914f10b/720p/mp4.mp4" }
+                ],
+                uuid: video.uuid
+              })
+
+              if (playlist.length == uuids.length) {
+                init_jwplayer();
+              }  
+            }
+            
+          },
+          error: function() {
             playlist.push({
-              image: format.thumbnail_url,
+              image: "https://cameratag.com/videos/v-4f03e790-f640-0131-cc78-12313914f10b/720p/small_thumb.png",
               sources: [
-                { file: source }
+                { file: "https://cameratag.com/videos/v-4f03e790-f640-0131-cc78-12313914f10b/720p/mp4.mp4" }
               ],
-              height: format.height,
-              width: format.width,
-              uuid: video.uuid
+              uuid: "v-4f03e790-f640-0131-cc78-12313914f10b"
             })
 
             if (playlist.length == uuids.length) {
               init_jwplayer();
-            }
-          },
-          error: function() {
-            // error fetching video from server
+            }  
           }
         });
       });
@@ -1727,7 +1754,6 @@ CameraTag = new function() {
         skin: "glow",
         abouttext: "powered by CameraTag",
         aboutlink: "http://www.cameratag.com",
-        sharing: {},
         playlist: playlist
       }
 
@@ -1738,7 +1764,7 @@ CameraTag = new function() {
         }
       }
 
-      combined_options = $.extend({}, default_options, user_options);
+      combined_options = $.extend({}, default_options, user_options); 
 
       jw_player_instance = jwplayer(player_id).setup( combined_options );
 
@@ -1785,7 +1811,7 @@ CameraTag = new function() {
             allow_play_count = true;
           }, 3000)
         }
-
+        
       })
       jw_player_instance.onPause(function(oldstate){
         CameraTag.fire(player_id, "pause", {oldstate: oldstate});
