@@ -1,8 +1,9 @@
 {
   "name": "cameratag",
-  "version": "3.0.1",
+  "version": "4.0.0",
   "authors": [
-    "Damon Aw <daemonsy@gmail.com>"
+    "Damon Aw <daemonsy@gmail.com>",
+    "John Bohn <jjbohn@gmail.com>"
   ],
   "main": "cameratag.js",
   "license": "MIT",
