@@ -4,7 +4,7 @@
 
 CameraTag = new function() {
   var self = this;
-  self.version = "3";
+  self.version = "4";
 
   var appServer = "cameratag.com";
 
@@ -611,7 +611,7 @@ CameraTag = new function() {
 
     var embedSWF = function() {
       var flashvars = {
-          videoServer: videoServer + ":443",
+          videoServer: videoServer,
           videoUUID: video.uuid,
           cameraUUID: camera.uuid,
           domID: dom_id,
@@ -1682,34 +1682,61 @@ CameraTag = new function() {
             var format = find_format_by_name( video, video_el.attr("data-format") ) || video.formats[0];
             var source;
 
-            // determine which source to use based on availability
-            if (format.state == "COMPLETED") {
-              source = format.mp4_url;
-            }
-            else if (format.flv_url) {
-              source = format.flv_url;
-            }
-            else {
-              // no source available
-              return;
+            if (format) {
+              // determine which source to use based on availability
+              if (format.state == "COMPLETED") {
+                source = format.mp4_url;
+              }
+              else if (format.flv_url) {
+                source = format.flv_url;
+              }
+              else {
+                // no source available
+                return;
+              }
+
+              playlist.push({
+                image: format.small_thumbnail_url,
+                sources: [
+                  { file: source }
+                ],
+                height: format.height,
+                width: format.width,
+                uuid: video.uuid
+              })
+
+              if (playlist.length == uuids.length) {
+                init_jwplayer();
+              }
             }
 
+            else {
+              playlist.push({
+                image: "https://cameratag.com/videos/v-4f03e790-f640-0131-cc78-12313914f10b/720p/small_thumb.png",
+                sources: [
+                  { file: "https://cameratag.com/videos/v-4f03e790-f640-0131-cc78-12313914f10b/720p/mp4.mp4" }
+                ],
+                uuid: video.uuid
+              })
+
+              if (playlist.length == uuids.length) {
+                init_jwplayer();
+              }
+            }
+
+          },
+          error: function() {
             playlist.push({
-              image: format.thumbnail_url,
+              image: "https://cameratag.com/videos/v-4f03e790-f640-0131-cc78-12313914f10b/720p/small_thumb.png",
               sources: [
-                { file: source }
+                { file: "https://cameratag.com/videos/v-4f03e790-f640-0131-cc78-12313914f10b/720p/mp4.mp4" }
               ],
-              height: format.height,
-              width: format.width,
-              uuid: video.uuid
+              uuid: "v-4f03e790-f640-0131-cc78-12313914f10b"
             })
 
             if (playlist.length == uuids.length) {
               init_jwplayer();
             }
-          },
-          error: function() {
-            // error fetching video from server
           }
         });
       });
@@ -1727,7 +1754,6 @@ CameraTag = new function() {
         skin: "glow",
         abouttext: "powered by CameraTag",
         aboutlink: "http://www.cameratag.com",
-        sharing: {},
         playlist: playlist
       }
 
